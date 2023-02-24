@@ -13,7 +13,7 @@ export class App extends Component {
     neutral: 0,
     bad: 0,
   };
-  l
+  
   
   onGoodClick = () => {
     this.setState(prevState => {
