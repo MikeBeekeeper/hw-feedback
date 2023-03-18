@@ -1,14 +1,23 @@
 import css from '../feedbackButtons/FeedbackOptions.module.css';
+import PropTypes from 'prop-types';
 
-const FeedbackOptions = ({onGoodClick, onNeutralClick, onBadClick}) => {
-
-    return (
-        <div className={css.buttonWrapper}>
-            <button type="button" className={css.button} onClick={onGoodClick}>Good</button>
-            <button type="button" className={css.button} onClick={onNeutralClick}>Neutral</button>
-            <button type="button" className={css.button} onClick={onBadClick}>Bad</button>
-        </div>
-    )
+const FeedbackOptions = ({ options, handleClick }) => {
+  return (
+    <ul className={css.buttonWrapper}>
+      {options.map((el, index) => (
+        <li key={index}>
+          <button type="button" className={css.button} onClick={handleClick}>
+            {el}
+          </button>
+        </li>
+      ))}
+    </ul>
+  );
 };
 
 export default FeedbackOptions;
+
+FeedbackOptions.propTypes = {
+    options: PropTypes.array.isRequired,
+    handleClick: PropTypes.func.isRequired,
+};

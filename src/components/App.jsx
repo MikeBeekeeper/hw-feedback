@@ -1,11 +1,9 @@
-
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import css from '../components/app.module.css';
 import Section from './Section/Section.js';
 import Statistics from './statistics/statistics.js';
 import Notification from './notification/Notification.js';
 import FeedbackOptions from './feedbackButtons/FeedbackOptions.js';
-
 
 export class App extends Component {
   state = {
@@ -13,63 +11,50 @@ export class App extends Component {
     neutral: 0,
     bad: 0,
   };
-  
-  
-  onGoodClick = () => {
+
+  onClick = e => {
+    const value = e.target.textContent;
     this.setState(prevState => {
       return {
-        good: prevState.good + 1,
-      }
-    })
+        [value]: prevState[value] + 1,
+      };
+    });
   };
 
-  onNeutralClick = () => {
-    this.setState(prevState => {
-      return {
-        neutral: prevState.neutral + 1,
-      }
-    })
-  };
-
-  onBadClick = () => {
-    this.setState(prevState => {
-      return {
-        bad: prevState.bad + 1,
-      }
-    })
-  }
- 
-
-  
-
-  
-  render() {
+  countingTotal = () => {
     const { good, neutral, bad } = this.state;
-    const total = good + neutral + bad;
-    const percentage = good / total * 100;
+    return good + neutral + bad;
+  };
+
+  countingPercentage = () => {
+    return (this.state.good / this.countingTotal()) * 100;
+  };
+
+  render() {
+    const { good, bad, neutral } = this.state;
 
     return (
-    <div className={css.app}>
+      <div className={css.app}>
         <Section title="Please leave feedback">
           <FeedbackOptions
-            onGoodClick={this.onGoodClick}
-            onNeutralClick={this.onNeutralClick}
-            onBadClick={this.onBadClick}
+            options={Object.keys(this.state)}
+            handleClick={this.onClick}
           />
-      </Section>
+        </Section>
         <Section title="Statistics">
-          {total === 0 ? <Notification message="There is no feedback" />
-          : <Statistics
-            good={this.state.good}
-            neutral={this.state.neutral}
-            bad={this.state.bad} 
-            total={total}
-            percent={Math.round(percentage)}/>} 
-          
-      </Section>
-    </div>
-  );
+          {this.countingTotal() === 0 ? (
+            <Notification message="There is no feedback" />
+          ) : (
+            <Statistics
+              good={good}
+              neutral={neutral}
+              bad={bad}
+              total={this.countingTotal()}
+              percent={Math.round(this.countingPercentage())}
+            />
+          )}
+        </Section>
+      </div>
+    );
   }
-  
-  
-};
+}
